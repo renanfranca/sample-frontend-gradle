@@ -8,6 +8,7 @@ bundles = {}
 	spring-boot = "3.2.5"
 	mockito = "5.11.0"
 	junit-jupiter = "5.10.2"
+  node-gradle = "7.0.2"
 [plugins]
 	[plugins.sonarqube]
 		id = "org.sonarqube"
@@ -19,6 +20,11 @@ bundles = {}
 
 		[plugins.spring-boot.version]
 			ref = "spring-boot"
+  [plugins.node-gradle]
+    id = "com.github.node-gradle.node"
+
+    [plugins.node-gradle.version]
+      ref = "node-gradle"
 [libraries]
 	[libraries.spring-boot-starter]
 		name = "spring-boot-starter"

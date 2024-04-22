@@ -1,8 +1,11 @@
+import com.github.gradle.node.npm.task.NpmTask
+
 plugins {
   java
   alias(libs.plugins.spring.boot)
   jacoco
   alias(libs.plugins.sonarqube)
+  alias(libs.plugins.node.gradle)
   // jhipster-needle-gradle-plugins
 }
 
@@ -75,6 +78,41 @@ sonarqube {
       property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
       property("sonar.junit.reportPaths", "build/test-results/test,build/test-results/integrationTest")
     }
+node {
+  version.set("v20.12.2")
+  npmVersion.set("10.5.2")
+  npmWorkDir.set(file("build"))
+}
+
+val buildTaskUsingNpm = tasks.register<NpmTask>("buildNpm") {
+  dependsOn(tasks.npmInstall)
+  npmCommand.set(listOf("run", "build"))
+//  args.set(listOf("--", "--out-dir", "${buildDir}/npm-output"))
+  environment.set(mapOf("APP_VERSION" to project.version.toString()))
+  // Does not need any inputs because what is needed were defined in package.json build command
+  // inputs.dir("src")
+  // outputs.dir("${layout.buildDirectory.get()}/npm-output")
+}
+
+val testTaskUsingNpm = tasks.register<NpmTask>("testNpm") {
+  dependsOn("test", "integrationTest")
+  dependsOn(tasks.npmInstall)
+  dependsOn(buildTaskUsingNpm)
+  npmCommand.set(listOf("run", "test"))
+//  args.set(listOf("test"))
+  ignoreExitValue.set(false)
+  workingDir.set(projectDir)
+  execOverrides {
+    standardOutput = System.out
+  }
+  // Does not need any inputs because it works without them
+//  inputs.dir("node_modules")
+//  inputs.file("package.json")
+//  inputs.dir("src")
+//  inputs.dir("test")
+//  outputs.upToDateWhen {
+//    true
+//  }
 }
 
 // jhipster-needle-gradle-plugins-configurations
@@ -121,6 +159,9 @@ tasks.test {
   }
   useJUnitPlatform()
   finalizedBy("jacocoTestCoverageVerification")
+
+  finalizedBy("testNpm")
+  // jhipster-needle-gradle-tasks-test
 }
 
 val integrationTest = task<Test>("integrationTest") {
