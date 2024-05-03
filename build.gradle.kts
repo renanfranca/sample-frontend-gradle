@@ -2,6 +2,7 @@ plugins {
   java
   alias(libs.plugins.spring.boot)
   jacoco
+  alias(libs.plugins.sonarqube)
   // jhipster-needle-gradle-plugins
 }
 
@@ -52,6 +53,28 @@ tasks.jacocoTestCoverageVerification {
       }
   }
   executionData.setFrom(fileTree(buildDir).include("**/jacoco/test.exec", "**/jacoco/integrationTest.exec"))
+}
+
+
+fun loadSonarProperties(): Map<String, List<String>> {
+    val properties = mutableMapOf<String, List<String>>()
+    File("sonar-project.properties").forEachLine { line ->
+        if (!line.startsWith("#") && line.contains("=")) {
+            val (key, value) = line.split("=", limit = 2)
+            properties[key.trim()] = value.split(",").map { it.trim() }
+        }
+    }
+    return properties
+}
+
+sonarqube {
+    properties {
+      loadSonarProperties().forEach { (key, value) ->
+        property(key, value)
+      }
+      property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+      property("sonar.junit.reportPaths", "build/test-results/test,build/test-results/integrationTest")
+    }
 }
 
 // jhipster-needle-gradle-plugins-configurations

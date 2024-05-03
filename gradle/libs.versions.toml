@@ -2,12 +2,18 @@ bundles = {}
 
 [versions]
 	reflections = "0.10.2"
+	sonarqube = "4.4.1.3373"
 	jacoco = "0.8.11"
 	assertj = "3.25.3"
 	spring-boot = "3.2.5"
 	mockito = "5.11.0"
 	junit-jupiter = "5.10.2"
 [plugins]
+	[plugins.sonarqube]
+		id = "org.sonarqube"
+
+		[plugins.sonarqube.version]
+			ref = "sonarqube"
 	[plugins.spring-boot]
 		id = "org.springframework.boot"
 
