@@ -2,6 +2,7 @@ bundles = {}
 
 [versions]
 	reflections = "0.10.2"
+	jacoco = "0.8.11"
 	assertj = "3.25.3"
 	spring-boot = "3.2.5"
 	mockito = "5.11.0"
