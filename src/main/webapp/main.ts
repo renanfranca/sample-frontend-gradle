@@ -1,3 +1,4 @@
+import { AuthInterceptor } from './app/auth/auth.interceptor';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { REMOVE_STYLES_ON_COMPONENT_DESTROY, bootstrapApplication } from '@angular/platform-browser';
@@ -15,7 +16,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([AuthInterceptor])),
     provideRouter(routes),
     importProvidersFrom([BrowserAnimationsModule]),
     { provide: REMOVE_STYLES_ON_COMPONENT_DESTROY, useValue: true },

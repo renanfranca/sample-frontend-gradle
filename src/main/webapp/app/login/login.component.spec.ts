@@ -1,0 +1,111 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormBuilder } from '@angular/forms';
+import { of, Subject } from 'rxjs';
+import { LoginService } from './login.service';
+import { AccountService } from '../auth/account.service';
+import { Account } from '../auth/account.model';
+
+import LoginComponent from './login.component';
+
+describe('Login Component', () => {
+  let comp: LoginComponent;
+  let fixture: ComponentFixture<LoginComponent>;
+  let mockAccountService: AccountService;
+  let mockLoginService: LoginService;
+  const account: Account = {
+    activated: true,
+    authorities: [],
+    email: '',
+    firstName: null,
+    langKey: '',
+    lastName: null,
+    login: 'login',
+  };
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [
+        FormBuilder,
+        AccountService,
+        {
+          provide: LoginService,
+          useValue: {
+            login: jest.fn(() => of({})),
+            logout: jest.fn(() => of({})),
+          },
+        },
+      ],
+    })
+      .overrideTemplate(LoginComponent, '')
+      .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(LoginComponent);
+    comp = fixture.componentInstance;
+    mockLoginService = TestBed.inject(LoginService);
+    mockAccountService = TestBed.inject(AccountService);
+  });
+
+  describe('ngOnInit', () => {
+    it('should check authentication', () => {
+      // GIVEN
+      const authenticationState = new Subject<Account | null>();
+      mockAccountService.getAuthenticationState = jest.fn(() => authenticationState.asObservable());
+
+      // WHEN
+      comp.ngOnInit();
+
+      // THEN
+      expect(mockAccountService.getAuthenticationState).toHaveBeenCalled();
+
+      // THEN
+      expect(comp.account()).toBeNull();
+
+      // WHEN
+      authenticationState.next(account);
+
+      // THEN
+      expect(comp.account()).toEqual(account);
+
+      // WHEN
+      authenticationState.next(null);
+
+      // THEN
+      expect(comp.account()).toBeNull();
+    });
+  });
+
+  describe('login', () => {
+    it('should authenticate the user', () => {
+      // GIVEN
+      const credentials = {
+        username: 'admin',
+        password: 'admin',
+      };
+
+      comp.loginForm.patchValue({
+        username: 'admin',
+        password: 'admin',
+      });
+
+      // WHEN
+      comp.login();
+
+      // THEN
+      expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
+    });
+  });
+
+  describe('logout', () => {
+    it('should logout the user', () => {
+      // WHEN
+      comp.logout();
+
+      // THEN
+      expect(mockLoginService.logout).toHaveBeenCalled();
+    });
+  });
+});
