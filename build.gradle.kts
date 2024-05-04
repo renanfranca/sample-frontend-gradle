@@ -64,13 +64,15 @@ fun loadSonarProperties(): Map<String, List<String>> {
 }
 
 sonarqube {
-    properties {
-      loadSonarProperties().forEach { (key, value) ->
-        property(key, value)
-      }
-      property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-      property("sonar.junit.reportPaths", "build/test-results/test,build/test-results/integrationTest")
+  properties {
+    loadSonarProperties().forEach { (key, value) ->
+      property(key, value)
     }
+    property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+    property("sonar.junit.reportPaths", "build/test-results/test,build/test-results/integrationTest")
+  }
+}
+
 node {
   version.set("v20.12.2")
   npmVersion.set("10.5.2")
@@ -78,7 +80,7 @@ node {
 }
 
 val buildTaskUsingNpm = tasks.register<NpmTask>("buildNpm") {
-  dependsOn(tasks.npmInstall)
+  dependsOn("npmInstall")
   npmCommand.set(listOf("run", "build"))
 //  args.set(listOf("--", "--out-dir", "${buildDir}/npm-output"))
   environment.set(mapOf("APP_VERSION" to project.version.toString()))
@@ -88,9 +90,7 @@ val buildTaskUsingNpm = tasks.register<NpmTask>("buildNpm") {
 }
 
 val testTaskUsingNpm = tasks.register<NpmTask>("testNpm") {
-  dependsOn("test", "integrationTest")
-  dependsOn(tasks.npmInstall)
-  dependsOn(buildTaskUsingNpm)
+  dependsOn("npmInstall", "buildNpm")
   npmCommand.set(listOf("run", "test"))
 //  args.set(listOf("test"))
   ignoreExitValue.set(false)
@@ -159,8 +159,7 @@ tasks.test {
   }
   useJUnitPlatform()
   finalizedBy("jacocoTestCoverageVerification")
-
-  finalizedBy("testNpm")
+  dependsOn("testNpm")
   // jhipster-needle-gradle-tasks-test
 }
 
