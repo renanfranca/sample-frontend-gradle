@@ -89,30 +89,17 @@ node {
 val buildTaskUsingNpm = tasks.register<NpmTask>("buildNpm") {
   dependsOn("npmInstall")
   npmCommand.set(listOf("run", "build"))
-//  args.set(listOf("--", "--out-dir", "${buildDir}/npm-output"))
   environment.set(mapOf("APP_VERSION" to project.version.toString()))
-  // Does not need any inputs because what is needed were defined in package.json build command
-  // inputs.dir("src")
-  // outputs.dir("${layout.buildDirectory.get()}/npm-output")
 }
 
 val testTaskUsingNpm = tasks.register<NpmTask>("testNpm") {
   dependsOn("npmInstall", "buildNpm")
   npmCommand.set(listOf("run", "test"))
-//  args.set(listOf("test"))
   ignoreExitValue.set(false)
   workingDir.set(projectDir)
   execOverrides {
     standardOutput = System.out
   }
-  // Does not need any inputs because it works without them
-//  inputs.dir("node_modules")
-//  inputs.file("package.json")
-//  inputs.dir("src")
-//  inputs.dir("test")
-//  outputs.upToDateWhen {
-//    true
-//  }
 }
 
 // jhipster-needle-gradle-plugins-configurations
