@@ -87,12 +87,16 @@ node {
 }
 
 val buildTaskUsingNpm = tasks.register<NpmTask>("buildNpm") {
+  description = "Build the frontend project using NPM"
+  group = "Build"
   dependsOn("npmInstall")
   npmCommand.set(listOf("run", "build"))
   environment.set(mapOf("APP_VERSION" to project.version.toString()))
 }
 
 val testTaskUsingNpm = tasks.register<NpmTask>("testNpm") {
+  description = "Test the frontend project using NPM"
+  group = "verification"
   dependsOn("npmInstall", "buildNpm")
   npmCommand.set(listOf("run", "test"))
   ignoreExitValue.set(false)
