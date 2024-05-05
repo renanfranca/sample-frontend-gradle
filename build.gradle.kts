@@ -99,6 +99,12 @@ val testTaskUsingNpm = tasks.register<NpmTask>("testNpm") {
   }
 }
 
+tasks.bootJar {
+  dependsOn("buildNpm")
+  from("build/classes/static") {
+      into("BOOT-INF/classes/static") // This will place the content under 'static' directory in the JAR
+  }
+}
 
 defaultTasks("bootRun")
 
