@@ -2,6 +2,7 @@ plugins = {}
 bundles = {}
 
 [versions]
+	jacoco = "0.8.11"
 	assertj = "3.25.3"
 	mockito = "5.11.0"
 	junit-jupiter = "5.10.2"
