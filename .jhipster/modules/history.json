@@ -23,5 +23,17 @@
       "indentSize" : 2,
       "baseName" : "jhipsterSampleApplication"
     }
+  }, {
+    "module" : "prettier",
+    "date" : "2024-05-05T03:18:38.717959541Z",
+    "properties" : {
+      "endOfLine" : "lf",
+      "springConfigurationFormat" : "yaml",
+      "packageName" : "com.mycompany.myapp",
+      "projectName" : "JHipster Sample Application",
+      "serverPort" : 8080,
+      "indentSize" : 2,
+      "baseName" : "jhipsterSampleApplication"
+    }
   } ]
 }
