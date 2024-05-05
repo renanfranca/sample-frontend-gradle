@@ -131,5 +131,17 @@
       "indentSize" : 2,
       "baseName" : "jhipsterSampleApplication"
     }
+  }, {
+    "module" : "spring-boot-tomcat",
+    "date" : "2024-05-05T03:18:39.513960515Z",
+    "properties" : {
+      "endOfLine" : "lf",
+      "springConfigurationFormat" : "yaml",
+      "packageName" : "com.mycompany.myapp",
+      "projectName" : "JHipster Sample Application",
+      "serverPort" : 8080,
+      "indentSize" : 2,
+      "baseName" : "jhipsterSampleApplication"
+    }
   } ]
 }

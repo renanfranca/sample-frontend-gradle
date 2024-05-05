@@ -100,10 +100,13 @@ dependencies {
   implementation(libs.spring.boot.starter)
   implementation(libs.spring.boot.configuration.processor)
   implementation(libs.commons.lang3)
+  implementation(libs.spring.boot.starter.validation)
+  implementation(libs.spring.boot.starter.web)
   // jhipster-needle-gradle-implementation-dependencies
   // jhipster-needle-gradle-compile-dependencies
   // jhipster-needle-gradle-runtime-dependencies
   testImplementation(libs.spring.boot.starter.test)
+  testImplementation(libs.reflections)
 
   // jhipster-needle-gradle-test-dependencies
 }

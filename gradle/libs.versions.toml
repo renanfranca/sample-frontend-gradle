@@ -2,6 +2,7 @@ bundles = {}
 
 [versions]
 	sonarqube = "4.4.1.3373"
+	reflections = "0.10.2"
 	jacoco = "0.8.11"
 	assertj = "3.25.3"
 	spring-boot = "3.2.5"
@@ -22,9 +23,21 @@ bundles = {}
 	[libraries.spring-boot-starter]
 		name = "spring-boot-starter"
 		group = "org.springframework.boot"
+	[libraries.spring-boot-starter-web]
+		name = "spring-boot-starter-web"
+		group = "org.springframework.boot"
 	[libraries.spring-boot-starter-test]
 		name = "spring-boot-starter-test"
 		group = "org.springframework.boot"
+	[libraries.spring-boot-starter-validation]
+		name = "spring-boot-starter-validation"
+		group = "org.springframework.boot"
+	[libraries.reflections]
+		name = "reflections"
+		group = "org.reflections"
+
+		[libraries.reflections.version]
+			ref = "reflections"
 	[libraries.spring-boot-dependencies]
 		name = "spring-boot-dependencies"
 		group = "org.springframework.boot"
