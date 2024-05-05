@@ -40,5 +40,6 @@ docker compose -f src/main/docker/sonar.yml up -d
 - [Assertions](documentation/assertions.md)
 - [Vue](documentation/vue.md)
 - [sonar](documentation/sonar.md)
+- [Logs Spy](documentation/logs-spy.md)
 
 <!-- jhipster-needle-documentation -->
