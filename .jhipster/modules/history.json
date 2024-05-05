@@ -83,5 +83,17 @@
       "indentSize" : 2,
       "baseName" : "jhipsterSampleApplication"
     }
+  }, {
+    "module" : "sonar-qube-java-backend-and-frontend",
+    "date" : "2024-05-05T03:18:39.118838991Z",
+    "properties" : {
+      "endOfLine" : "lf",
+      "springConfigurationFormat" : "yaml",
+      "packageName" : "com.mycompany.myapp",
+      "projectName" : "JHipster Sample Application",
+      "serverPort" : 8080,
+      "indentSize" : 2,
+      "baseName" : "jhipsterSampleApplication"
+    }
   } ]
 }
