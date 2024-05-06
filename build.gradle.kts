@@ -1,4 +1,5 @@
 import com.github.gradle.node.npm.task.NpmTask
+// jhipster-needle-gradle-imports
 
 plugins {
   java
