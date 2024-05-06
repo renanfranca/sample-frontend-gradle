@@ -1,8 +1,12 @@
+import com.github.gradle.node.npm.task.NpmTask
+// jhipster-needle-gradle-imports
+
 plugins {
   java
   jacoco
   alias(libs.plugins.sonarqube)
   alias(libs.plugins.spring.boot)
+  alias(libs.plugins.node.gradle)
   // jhipster-needle-gradle-plugins
 }
 
@@ -61,15 +65,47 @@ fun loadSonarProperties(): Map<String, List<String>> {
 }
 
 sonarqube {
-    properties {
-      loadSonarProperties().forEach { (key, value) ->
-        property(key, value)
-      }
-      property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-      property("sonar.junit.reportPaths", "build/test-results/test,build/test-results/integrationTest")
+  properties {
+    loadSonarProperties().forEach { (key, value) ->
+      property(key, value)
     }
+    property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+    property("sonar.junit.reportPaths", "build/test-results/test,build/test-results/integrationTest")
+  }
 }
 
+node {
+  version.set("v20.12.2")
+  npmVersion.set("10.5.2")
+  npmWorkDir.set(file("build"))
+}
+
+val buildTaskUsingNpm = tasks.register<NpmTask>("buildNpm") {
+  description = "Build the frontend project using NPM"
+  group = "Build"
+  dependsOn("npmInstall")
+  npmCommand.set(listOf("run", "build"))
+  environment.set(mapOf("APP_VERSION" to project.version.toString()))
+}
+
+val testTaskUsingNpm = tasks.register<NpmTask>("testNpm") {
+  description = "Test the frontend project using NPM"
+  group = "verification"
+  dependsOn("npmInstall", "buildNpm")
+  npmCommand.set(listOf("run", "test"))
+  ignoreExitValue.set(false)
+  workingDir.set(projectDir)
+  execOverrides {
+    standardOutput = System.out
+  }
+}
+
+tasks.bootJar {
+  dependsOn("buildNpm")
+  from("build/classes/static") {
+      into("BOOT-INF/classes/static") // This will place the content under 'static' directory in the JAR
+  }
+}
 
 defaultTasks("bootRun")
 
@@ -121,6 +157,8 @@ tasks.test {
   }
   useJUnitPlatform()
   finalizedBy("jacocoTestCoverageVerification")
+  dependsOn("testNpm")
+  // jhipster-needle-gradle-tasks-test
 }
 
 val integrationTest = task<Test>("integrationTest") {
