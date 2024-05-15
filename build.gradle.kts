@@ -25,7 +25,7 @@ tasks.jacocoTestReport {
     xml.required.set(true)
     html.required.set(true)
   }
-  executionData.setFrom(fileTree(buildDir).include("**/jacoco/test.exec", "**/jacoco/integrationTest.exec"))
+  executionData.setFrom(fileTree(layout.buildDirectory).include("**/jacoco/test.exec", "**/jacoco/integrationTest.exec"))
 }
 
 tasks.jacocoTestCoverageVerification {
@@ -73,10 +73,14 @@ sonarqube {
   }
 }
 
+val nodeVersion by extra("v20.12.2")
+val npmVersion by extra("8.19.2")
+// jhipster-needle-gradle-properties
+
 node {
   version.set("v20.12.2")
-  npmVersion.set("10.5.2")
-  npmWorkDir.set(file("build"))
+  npmVersion.set(npmVersion)
+  npmWorkDir.set(file(layout.buildDirectory))
 }
 
 val buildTaskUsingNpm = tasks.register<NpmTask>("buildNpm") {
@@ -121,8 +125,6 @@ repositories {
 
 group = "com.mycompany.myapp"
 version = "0.0.1-SNAPSHOT"
-
-// jhipster-needle-gradle-properties
 
 val profiles = (project.findProperty("profiles") as String? ?: "")
   .split(",")
